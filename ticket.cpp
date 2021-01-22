@@ -418,6 +418,7 @@ main(void)
 
 //things to do
 
+// CLEAN UP CODE YUNG LAST STEP
 // dapat yung spacing ng table hindi masira kapag nag input ng mahabang name
 // dapat yung search ay makapag recommend ng available seats *TAPOS NA*
 // kailangan based sa input sa kung gano karami yung magpapareserve para pwedeng individual or group *TAPOS NA*
