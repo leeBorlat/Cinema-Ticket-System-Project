@@ -18,6 +18,7 @@ void erase(void);
 void view(void);
 void quit(void);
 void tickets(void);
+void cinemascreen(void);
 
 void (*options[])(void) = {reserve, search, erase, view, quit};
 char space();
@@ -54,19 +55,18 @@ char space()
     cout << "                        ";
     return 0;
 }
+void cinemascreen()
+{
+    cout << "\n\n";
+    cout << space() << "                   ****************************************************" << endl;
+    cout << space() << "                   *                   Lee's Cinema                   *" << endl;
+    cout << space() << "                   ****************************************************" << endl;
+}
 //program logo
 void page(void)
 {
-    cout << space() << "**************************" << endl;
-    cout << space() << "*                        *" << endl;
-    cout << space() << "*                        *" << endl;
-    cout << space() << "*      Lee's Cinema      *" << endl;
-    cout << space() << "*         Tickets        *" << endl;
-    cout << space() << "*                        *" << endl;
-    cout << space() << "*                        *" << endl;
-    cout << space() << "*                        *" << endl;
-    cout << space() << "**************************" << endl;
-    cout << space() << "Type start: ";
+    cinemascreen();
+    cout << space() << "                   Type start: ";
     cin >> startButton;
     if (startButton != "start")
     {
@@ -135,6 +135,7 @@ void tickets(void)
 void reserve(void)
 {
     system("cls");
+    remove("my_receipt.txt");
     char rowNo;
     int colNo;
     int inputNumSeats;
@@ -145,22 +146,24 @@ void reserve(void)
 
     //Prints out available seats available to reserve.
     cout << space() << "Here are the available seats you can reserve: \n";
+    cinemascreen();
     tickets();
 
-    cout << space() << "Enter your reservation details: \n";
+    cout << "\n\n"
+         << space() << "Enter your reservation details: \n\n";
     for (int s = 1; s <= inputNumSeats; s++)
     {
-        cout << space() << "Row Letter: ";
+        cout << space() << "\tRow Letter: ";
         cin >> rowNo;
         rowNo = toupper(rowNo);
-        cout << space() << "Column Number: ";
+        cout << space() << "\tColumn Number: ";
         cin >> colNo;
-        cout << space() << "Customer Name: ";
+        cout << space() << "\tCustomer Name: ";
         cin >> customerName;
+        cout << "\n\n";
         int transRowNo;
         switch (rowNo)
         {
-
         case 'A':
             transRowNo = 1;
             break;
@@ -178,47 +181,45 @@ void reserve(void)
             break;
         }
 
-        if (ticketTable[transRowNo][colNo] != " X ")
+        if (ticketTable[transRowNo + 1][colNo] != "X  ")
         {
             ticketTable[transRowNo][colNo] = customerName;
-            ticketTable[transRowNo + 1][colNo] = " X ";
+            ticketTable[transRowNo + 1][colNo] = "X  ";
         }
-        else if (ticketTable[transRowNo + 1][colNo] == " X ")
+        else if (ticketTable[transRowNo + 1][colNo] == "X  ")
         {
-            cout << space() << "Sorry. This seat is already reserved\n"
-                 << endl;
+            char answer;
+            cout << space() << "Sorry. This seat is already reserved. Reserve again? (Y/N): ";
+            cin >> answer;
+            answer = toupper(answer);
+
+            if (answer == 'Y')
+                reserve();
+            else
+                messagemenu();
+            return;
         }
 
         fstream my_receipt;
         my_receipt.open("my_receipt.txt", ios::out | ios::app);
-        my_receipt << "Row Number: " << rowNo << "\n";
-        my_receipt << "Column Number: " << colNo << "\n";
-        my_receipt << "Customer Name: " << customerName << "\n";
+        my_receipt << "\tCustomer Name: " << customerName << "\n";
+        my_receipt << "\tReserved Seat Location: " << rowNo << colNo << "\n";
         my_receipt.close();
     }
 
-    //table
-    cout << "\n\n\n";
-    for (int x = 0; x <= 10; x++)
-    {
-        space();
-        for (int y = 0; y <= 5; y++)
-        {
-            cout << ticketTable[x][y];
-            if (x == 0)
-                continue;
-            cout << "      |      ";
-        }
-
-        cout << "\n";
-    }
+    //printout table
+    system("cls");
+    space();
+    cinemascreen();
+    tickets();
 
     cout << "\n\n";
-    cout << space() << space() << space() << space() << "'X' = reserved" << endl;
-    cout << space() << space() << space() << space() << "'seat No.' = available" << endl;
+    cout << space() << space() << "'X' = reserved" << endl;
+    cout << space() << space() << "'A1...' = available \n\n"
+         << endl;
 
     char answer;
-    cout << space() << "Would you like to go back to the main menu (Y/N)?";
+    cout << space() << "Would you like to go back to the main menu (Y/N)?: ";
     cin >> answer;
     answer = toupper(answer);
 
@@ -259,24 +260,13 @@ void search(void)
         break;
     }
     if (ticketTable[transRowNo][searchCol] != "   ")
-    {
-        //printout table
-        for (int x = 0; x <= 10; x++)
-        {
-            space();
-            for (int y = 0; y <= 5; y++)
-            {
-                cout << ticketTable[x][y];
-                if (x == 0)
-                    continue;
-                cout << "      |      ";
-            }
-
-            cout << "\n";
-        }
+    { //printout table
+        space();
+        cinemascreen();
+        tickets();
 
         cout << "\n"
-             << space() << "This seat is reserved. Would you like to search for more? (Y/N) : ";
+             << space() << "This seat is reserved. Would you like to search for more (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
         if (answer == 'Y')
@@ -287,22 +277,12 @@ void search(void)
     else
     {
         //printout table
-        for (int x = 0; x <= 10; x++)
-        {
-            space();
-            for (int y = 0; y <= 5; y++)
-            {
-                cout << ticketTable[x][y];
-                if (x == 0)
-                    continue;
-                cout << "      |      ";
-            }
-
-            cout << "\n";
-        }
+        space();
+        cinemascreen();
+        tickets();
 
         cout << "\n\n";
-        cout << space() << "This seat is available. Would you like to reserve a seat? (Y/N)";
+        cout << space() << "This seat is available. Would you like to reserve a seat (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
         if (answer == 'Y')
@@ -342,14 +322,15 @@ void erase(void)
     }
     string col = to_string(delCol);
     string delInput = delRow + col;
-    if (ticketTable[transRowNo + 1][delCol] == " X ")
+    if (ticketTable[transRowNo + 1][delCol] == "X  ")
     {
         ticketTable[transRowNo][delCol] = "   ";
         ticketTable[transRowNo + 1][delCol] = delInput + " ";
 
         remove("my_receipt.txt");
 
-        cout << space() << "Deleted reservation succesfully. Would you like to go back to the main menu (Y/N)";
+        cout << "\n\n"
+             << space() << "Deleted reservation succesfully. Would you like to go back to the main menu (Y/N)? : ";
         char answer;
         cin >> answer;
         answer = toupper(answer);
@@ -365,7 +346,7 @@ void erase(void)
     else
     {
         char answer;
-        cout << "No seats reserved. Would you like to reserve first? (Y/N)";
+        cout << "No seats reserved. Would you like to reserve first? (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
         if (answer == 'Y')
@@ -378,20 +359,10 @@ void erase(void)
 void view(void)
 {
     system("cls");
-    //table
-    for (int x = 0; x <= 10; x++)
-    {
-        space();
-        for (int y = 0; y <= 5; y++)
-        {
-            cout << ticketTable[x][y];
-            if (x == 0)
-                continue;
-            cout << "      |      ";
-        }
-
-        cout << "\n";
-    }
+    //printout table
+    space();
+    cinemascreen();
+    tickets();
 
     char answer;
     string lineFromReceipt;
@@ -403,7 +374,7 @@ void view(void)
          << space() << "Thank you for watching in Lee's Cinema.\n"
          << space() << endl
          << endl
-         << space() << "Here is your receipt. \n";
+         << space() << "Here is your receipt. \n\n";
     while (my_receipt.good())
     {
         getline(my_receipt, lineFromReceipt);
@@ -413,7 +384,7 @@ void view(void)
     my_receipt.close();
 
     cout << "\n"
-         << space() << "Would you like to go back to the main menu (Y/N)?";
+         << space() << "Would you like to go back to the main menu (Y/N)? : ";
     cin >> answer;
     answer = toupper(answer);
     if (answer == 'Y')
@@ -448,13 +419,13 @@ main(void)
 //things to do
 
 // dapat yung spacing ng table hindi masira kapag nag input ng mahabang name
-// dapat yung search ay makapag recommend ng available seats
-// kailangan based sa input sa kung gano karami yung magpapareserve para pwedeng individual or group
-// dapat sa isang text file nalang my_receipt.txt tapos nag a-append kapag nag pa reserve by group.
-// pag nag delete dapat ma delete rin yung txt file
-// pagandahin pa yung table at yung code
-// ayusin yung pag input ng user para hindi mukhang tae kapag mag ttype sila
-// INDENTION PARA MALINIS space()
+// dapat yung search ay makapag recommend ng available seats *TAPOS NA*
+// kailangan based sa input sa kung gano karami yung magpapareserve para pwedeng individual or group *TAPOS NA*
+// dapat sa isang text file nalang my_receipt.txt tapos nag a-append kapag nag pa reserve by group.*TAPOS NA*
+// pag nag delete dapat ma delete rin yung txt file*TAPOS NA*
+// pagandahin pa yung table at yung code *TAPOS NA*
+// ayusin yung pag input ng user para hindi mukhang tae kapag mag ttype sila *TAPOS NA*
+// INDENTION PARA MALINIS space() *TAPOS NA*
 
 //TAPOS TAPOS NA?
 

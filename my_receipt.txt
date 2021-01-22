@@ -1,6 +1,2 @@
-Row Number: A
-Column Number: 1
-Customer Name: lee
-Row Number: C
-Column Number: 3
-Customer Name: gab
+	Customer Name: lee
+	Reserved Seat Location: A1
