@@ -116,12 +116,10 @@ int messagemenu(void)
 //0.Table
 void tickets(void)
 {
-    cout << space() << "Seats available: \n"
-         << endl;
     //to print out table
     for (int x = 0; x <= 10; x++)
     {
-
+        space();
         for (int y = 0; y <= 5; y++)
         {
             cout << ticketTable[x][y];
@@ -132,79 +130,73 @@ void tickets(void)
 
         cout << "\n";
     }
-    int transRowNo;
-    switch (rowNo)
-    {
-    case 'A':
-        transRowNo = 1;
-        break;
-    case 'B':
-        transRowNo = 2;
-        break;
-    case 'C':
-        transRowNo = 3;
-        break;
-    case 'D':
-        transRowNo = 4;
-        break;
-    case 'E':
-        transRowNo = 5;
-        break;
-    }
-
-    if (ticketTable[transRowNo + 1][colNo] != " X ")
-    {
-
-        ticketTable[transRowNo + 1][colNo] = " X ";
-    }
-    cout << ticketTable[transRowNo + 1][colNo];
 }
-
 //1. Reserve
 void reserve(void)
 {
     system("cls");
     char rowNo;
     int colNo;
+    int inputNumSeats;
 
-    cout << space() << "Row Letter: ";
-    cin >> rowNo;
-    rowNo = toupper(rowNo);
-    cout << space() << "Column Number: ";
-    cin >> colNo;
-    cout << space() << "Customer Name: ";
-    cin >> customerName;
+    //Inputs number of seats to reserve
+    cout << space() << "Enter number of seats to reserve: ";
+    cin >> inputNumSeats;
 
-    int transRowNo;
-    switch (rowNo)
+    //Prints out available seats available to reserve.
+    cout << space() << "Here are the available seats you can reserve: \n";
+    tickets();
+
+    cout << space() << "Enter your reservation details: \n";
+    for (int s = 1; s <= inputNumSeats; s++)
     {
-    case 'A':
-        transRowNo = 1;
-        break;
-    case 'B':
-        transRowNo = 2;
-        break;
-    case 'C':
-        transRowNo = 3;
-        break;
-    case 'D':
-        transRowNo = 4;
-        break;
-    case 'E':
-        transRowNo = 5;
-        break;
+        cout << space() << "Row Letter: ";
+        cin >> rowNo;
+        rowNo = toupper(rowNo);
+        cout << space() << "Column Number: ";
+        cin >> colNo;
+        cout << space() << "Customer Name: ";
+        cin >> customerName;
+        int transRowNo;
+        switch (rowNo)
+        {
+
+        case 'A':
+            transRowNo = 1;
+            break;
+        case 'B':
+            transRowNo = 3;
+            break;
+        case 'C':
+            transRowNo = 5;
+            break;
+        case 'D':
+            transRowNo = 7;
+            break;
+        case 'E':
+            transRowNo = 9;
+            break;
+        }
+
+        if (ticketTable[transRowNo][colNo] != " X ")
+        {
+            ticketTable[transRowNo][colNo] = customerName;
+            ticketTable[transRowNo + 1][colNo] = " X ";
+        }
+        else if (ticketTable[transRowNo + 1][colNo] == " X ")
+        {
+            cout << space() << "Sorry. This seat is already reserved\n"
+                 << endl;
+        }
+
+        fstream my_receipt;
+        my_receipt.open("my_receipt.txt", ios::out | ios::app);
+        my_receipt << "Row Number: " << rowNo << "\n";
+        my_receipt << "Column Number: " << colNo << "\n";
+        my_receipt << "Customer Name: " << customerName << "\n";
+        my_receipt.close();
     }
 
-    if (ticketTable[transRowNo + 1][colNo] != " X ")
-    {
-        ticketTable[transRowNo][colNo] = customerName;
-        ticketTable[transRowNo + 1][colNo] = " X ";
-    }
-    else if (ticketTable[transRowNo + 1][colNo] == " X ")
-    {
-        cout << space() << "Sorry. This seat is already reserved\n"
-             << endl;
-    }
     //table
     cout << "\n\n\n";
     for (int x = 0; x <= 10; x++)
@@ -225,12 +217,6 @@ void reserve(void)
     cout << space() << space() << space() << space() << "'X' = reserved" << endl;
     cout << space() << space() << space() << space() << "'seat No.' = available" << endl;
 
-    fstream my_receipt;
-    my_receipt.open(customerName, ios::app);
-    my_receipt << "Row Number: " << rowNo << "\n";
-    my_receipt << "Column Number: " << colNo << "\n";
-    my_receipt << "Customer Name: " << customerName << "\n";
-    my_receipt.close();
     char answer;
     cout << space() << "Would you like to go back to the main menu (Y/N)?";
     cin >> answer;
@@ -361,7 +347,7 @@ void erase(void)
         ticketTable[transRowNo][delCol] = "   ";
         ticketTable[transRowNo + 1][delCol] = delInput + " ";
 
-        remove(customerName);
+        remove("my_receipt.txt");
 
         cout << space() << "Deleted reservation succesfully. Would you like to go back to the main menu (Y/N)";
         char answer;
@@ -410,7 +396,7 @@ void view(void)
     char answer;
     string lineFromReceipt;
     fstream my_receipt;
-    my_receipt.open(customerName, ios::in | ios::app);
+    my_receipt.open("my_receipt.txt", ios::in | ios::app);
     my_receipt >> lineFromReceipt;
     my_receipt.seekg(0);
     cout << "\n"
