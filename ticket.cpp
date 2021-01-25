@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
-#include <string>
+#include <cstring>
 using namespace std;
 
 //PANG INITIALIZE NG MGA FUNCTIONS
@@ -19,25 +19,18 @@ void view(void);
 void quit(void);
 void tickets(void);
 void cinemascreen(void);
+int customerNames(void);
 
 void (*options[])(void) = {reserve, search, erase, view, quit};
 char space();
 
 //UNIVERSAL VARIABLES
-char rowNo;
-int colNo;
-int quitters;
-char delRow;
-int delCol;
-int delAns;
-char searchRow;
-int searchCol;
-char answer;
-char customerName[100];
-string startButton;
+char rowNo, searchRow, delRow, answer;
+int colNo, quitters, delCol, delAns, searchCol, maxLength = 0, lenOfName = 0;
+string customerName, startButton;
 string ticketTable[11][6] = {
 
-    {"      ", "         1      ", "         2      ", "         3      ", "         4      ", "         5      "},
+    {" ", "1  ", "2  ", "3  ", "4  ", "5  "},
     {"A", "   ", "   ", "   ", "   ", "   "},
     {" ", "A1 ", "A2 ", "A3 ", "A4 ", "A5 "},
     {"B", "   ", "   ", "   ", "   ", "   "},
@@ -117,19 +110,52 @@ int messagemenu(void)
 void tickets(void)
 {
     //to print out table
+    int newMaxLength;
     for (int x = 0; x <= 10; x++)
     {
         space();
         for (int y = 0; y <= 5; y++)
         {
-            cout << ticketTable[x][y];
-            if (x == 0)
-                continue;
-            cout << "      |      ";
+            cout << " " << ticketTable[x][y];
+            if (ticketTable[x][y].length() == 5)
+            {
+                newMaxLength = (5 / 2) + 1;
+                for (int nameSpace = 0; nameSpace < newMaxLength; nameSpace++)
+                {
+                    cout << "*";
+                }
+            }
+            else if (ticketTable[x][y].length() != maxLength)
+            {
+                for (int nameSpaceTwo = 1; nameSpaceTwo < maxLength; nameSpaceTwo++)
+                {
+                    while (maxLength % 2 != 0)
+                    {
+                        maxLength += 1;
+                        continue;
+                    }
+                    cout << ".";
+                }
+            }
+
+            cout << "|";
         }
 
         cout << "\n";
     }
+}
+// pang call ng customer name
+
+int customerNames()
+{
+    cout << space() << "\tCustomer Name: ";
+    cin >> customerName;
+    lenOfName = customerName.length();
+    if (maxLength < lenOfName)
+    {
+        maxLength = lenOfName;
+    }
+    return maxLength;
 }
 //1. Reserve
 void reserve(void)
@@ -153,13 +179,13 @@ void reserve(void)
          << space() << "Enter your reservation details: \n\n";
     for (int s = 1; s <= inputNumSeats; s++)
     {
+
         cout << space() << "\tRow Letter: ";
         cin >> rowNo;
         rowNo = toupper(rowNo);
         cout << space() << "\tColumn Number: ";
         cin >> colNo;
-        cout << space() << "\tCustomer Name: ";
-        cin >> customerName;
+        customerNames();
         cout << "\n\n";
         int transRowNo;
         switch (rowNo)
