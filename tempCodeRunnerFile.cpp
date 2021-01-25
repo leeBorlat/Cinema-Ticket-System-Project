@@ -1,2 +1,2 @@
 
-            break;
+                newMaxLength = 5;
