@@ -7,6 +7,7 @@
 #include <fstream>
 #include <cstring>
 #include <iomanip>
+#include <ctime>
 using namespace std;
 
 //PANG INITIALIZE NG MGA FUNCTIONS
@@ -30,17 +31,17 @@ int colNo, quitters, delCol, delAns, searchCol, maxLength = 0, lenOfName = 0;
 string customerName, startButton;
 string ticketTable[11][6] = {
 
-    {" ", "1  ", "2  ", "3  ", "4  ", "5  "},
-    {"A", "   ", "   ", "   ", "   ", "   "},
-    {" ", "A1 ", "A2 ", "A3 ", "A4 ", "A5 "},
-    {"B", "   ", "   ", "   ", "   ", "   "},
-    {" ", "B1 ", "B2 ", "B3 ", "B4 ", "B5 "},
-    {"C", "   ", "   ", "   ", "   ", "   "},
-    {" ", "C1 ", "C2 ", "C3 ", "C4 ", "C5 "},
-    {"D", "   ", "   ", "   ", "   ", "   "},
-    {" ", "D1 ", "D2 ", "D3 ", "D4 ", "D5 "},
-    {"E", "   ", "   ", "   ", "   ", "   "},
-    {" ", "E1 ", "E2 ", "E3 ", "E4 ", "E5 "}};
+    {" ", " 1", " 2", " 3", " 4", " 5"},
+    {"A", "  ", "  ", "  ", "  ", "  "},
+    {" ", "A1", "A2", "A3", "A4", "A5"},
+    {"B", "  ", "  ", "  ", "  ", "  "},
+    {" ", "B1", "B2", "B3", "B4", "B5"},
+    {"C", "  ", "  ", "  ", "  ", "  "},
+    {" ", "C1", "C2", "C3", "C4", "C5"},
+    {"D", "  ", "  ", "  ", "  ", "  "},
+    {" ", "D1", "D2", "D3", "D4", "D5"},
+    {"E", "  ", "  ", "  ", "  ", "  "},
+    {" ", "E1", "E2", "E3", "E4", "E5"}};
 
 //pang lagay space
 char space()
@@ -117,14 +118,38 @@ void tickets(void)
         space();
         for (int y = 0; y <= 5; y++)
         {
-            cout << "      " << ticketTable[x][y];
             if (ticketTable[x][y].length() == 6)
             {
-                cout << setw(4) << "" << setw(4);
+                cout << setw(11);
             }
             else if (ticketTable[x][y].length() == 5)
             {
+                cout << setw(7);
+            }
+            else if (ticketTable[x][y].length() == 4)
+            {
+                cout << setw(10);
+            }
+            else if (ticketTable[x][y].length() == 3)
+            {
+                cout << setw(9);
+            }
+            else if (ticketTable[x][y].length() == 2)
+            {
+                cout << setw(8);
+            }
+            else if (ticketTable[x][y].length() == 1)
+            {
+                cout << setw(8);
+            }
+            cout << ticketTable[x][y];
+            if (ticketTable[x][y].length() == 6)
+            {
                 cout << setw(5);
+            }
+            else if (ticketTable[x][y].length() == 5)
+            {
+                cout << setw(6);
             }
             else if (ticketTable[x][y].length() == 4)
             {
@@ -140,11 +165,9 @@ void tickets(void)
             }
             else if (ticketTable[x][y].length() == 1)
             {
-                cout << setw(9);
+                cout << setw(8);
             }
-            else
-            {
-            }
+
             cout << "|";
         }
 
@@ -165,7 +188,7 @@ int customerNames()
         cin >> answer;
         answer = toupper(answer);
 
-        if (answer == 'Y')
+        if (answer == 'Y' || "YES")
             reserve();
         else
             messagemenu();
@@ -229,29 +252,35 @@ void reserve(void)
             break;
         }
 
-        if (ticketTable[transRowNo + 1][colNo] != "X  ")
+        if (ticketTable[transRowNo + 1][colNo] != " X ")
         {
             ticketTable[transRowNo][colNo] = customerName;
-            ticketTable[transRowNo + 1][colNo] = "X  ";
+            ticketTable[transRowNo + 1][colNo] = " X ";
         }
-        else if (ticketTable[transRowNo + 1][colNo] == "X  ")
+        else if (ticketTable[transRowNo + 1][colNo] == " X ")
         {
             char answer;
             cout << space() << "Sorry. This seat is already reserved. Reserve again? (Y/N): ";
             cin >> answer;
             answer = toupper(answer);
 
-            if (answer == 'Y')
+            if (answer == 'Y' || "YES")
                 reserve();
             else
                 messagemenu();
             return;
         }
-
+        //to get the time they reserved:
+        time_t tt;
+        struct tm *ti;
+        time(&tt);
+        ti = localtime(&tt);
         fstream my_receipt;
         my_receipt.open("my_receipt.txt", ios::out | ios::app);
         my_receipt << "\tCustomer Name: " << customerName << "\n";
         my_receipt << "\tReserved Seat Location: " << rowNo << colNo << "\n";
+        my_receipt << "\tTime you reserved: " << asctime(ti);
+
         my_receipt.close();
     }
 
@@ -272,7 +301,7 @@ void reserve(void)
     cin >> answer;
     answer = toupper(answer);
 
-    if (answer == 'Y')
+    if (answer == 'Y' || "YES")
         messagemenu();
     else
         reserve();
@@ -308,7 +337,7 @@ void search(void)
         transRowNo = 5;
         break;
     }
-    if (ticketTable[transRowNo][searchCol] != "   ")
+    if (ticketTable[transRowNo][searchCol] != "  ")
     { //printout table
         space();
         cinemascreen();
@@ -318,7 +347,7 @@ void search(void)
              << space() << "This seat is reserved. Would you like to search for more (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
-        if (answer == 'Y')
+        if (answer == 'Y' || "YES")
         {
             search();
         }
@@ -334,7 +363,7 @@ void search(void)
         cout << space() << "This seat is available. Would you like to reserve a seat (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
-        if (answer == 'Y')
+        if (answer == 'Y' || "YES")
         {
             reserve();
         }
@@ -371,7 +400,7 @@ void erase(void)
     }
     string col = to_string(delCol);
     string delInput = delRow + col;
-    if (ticketTable[transRowNo + 1][delCol] == "X  ")
+    if (ticketTable[transRowNo + 1][delCol] == " X ")
     {
         ticketTable[transRowNo][delCol] = "   ";
         ticketTable[transRowNo + 1][delCol] = delInput + " ";
@@ -383,7 +412,7 @@ void erase(void)
         char answer;
         cin >> answer;
         answer = toupper(answer);
-        if (answer == 'Y')
+        if (answer == 'Y' || "YES")
         {
             messagemenu();
         }
@@ -398,7 +427,7 @@ void erase(void)
         cout << "No seats reserved. Would you like to reserve first? (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
-        if (answer == 'Y')
+        if (answer == 'Y' || "YES")
         {
             reserve();
         }
@@ -436,7 +465,7 @@ void view(void)
          << space() << "Would you like to go back to the main menu (Y/N)? : ";
     cin >> answer;
     answer = toupper(answer);
-    if (answer == 'Y')
+    if (answer == 'Y' || "YES")
         messagemenu();
     else
         view();

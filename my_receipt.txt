@@ -1,2 +1,6 @@
-	Customer Name: lee
+	Customer Name: ryan
 	Reserved Seat Location: A1
+	Time you reserved: Wed Jan 27 12:02:55 2021
+	Customer Name: lee
+	Reserved Seat Location: A2
+	Time you reserved: Wed Jan 27 12:02:57 2021
