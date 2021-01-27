@@ -11,18 +11,8 @@
 using namespace std;
 
 //PANG INITIALIZE NG MGA FUNCTIONS
-void seats(void);
-void page(void);
+void seats(void), page(void), reserve(void), search(void), erase(void), view(void), quit(void), tickets(void), cinemascreen(void), (*options[])(void) = {reserve, search, erase, view, quit};
 int messagemenu(void);
-void reserve(void);
-void search(void);
-void erase(void);
-void view(void);
-void quit(void);
-void tickets(void);
-void cinemascreen(void);
-
-void (*options[])(void) = {reserve, search, erase, view, quit};
 char space();
 
 //UNIVERSAL VARIABLES
@@ -119,58 +109,32 @@ void tickets(void)
         for (int y = 0; y <= 5; y++)
         {
             if (ticketTable[x][y].length() == 6)
-            {
                 cout << setw(11);
-            }
             else if (ticketTable[x][y].length() == 5)
-            {
                 cout << setw(7);
-            }
             else if (ticketTable[x][y].length() == 4)
-            {
                 cout << setw(10);
-            }
             else if (ticketTable[x][y].length() == 3)
-            {
                 cout << setw(9);
-            }
             else if (ticketTable[x][y].length() == 2)
-            {
                 cout << setw(8);
-            }
             else if (ticketTable[x][y].length() == 1)
-            {
                 cout << setw(8);
-            }
             cout << ticketTable[x][y];
             if (ticketTable[x][y].length() == 6)
-            {
                 cout << setw(5);
-            }
             else if (ticketTable[x][y].length() == 5)
-            {
                 cout << setw(6);
-            }
             else if (ticketTable[x][y].length() == 4)
-            {
                 cout << setw(6);
-            }
             else if (ticketTable[x][y].length() == 3)
-            {
                 cout << setw(7);
-            }
             else if (ticketTable[x][y].length() == 2)
-            {
                 cout << setw(8);
-            }
             else if (ticketTable[x][y].length() == 1)
-            {
                 cout << setw(8);
-            }
-
             cout << "|";
         }
-
         cout << "\n";
     }
 }
@@ -188,7 +152,7 @@ int customerNames()
         cin >> answer;
         answer = toupper(answer);
 
-        if (answer == 'Y' || "YES")
+        if (answer == 'Y')
             reserve();
         else
             messagemenu();
@@ -196,9 +160,7 @@ int customerNames()
 
     lenOfName = customerName.length();
     if (maxLength < lenOfName)
-    {
         maxLength = lenOfName;
-    }
     return maxLength;
 }
 //1. Reserve
@@ -264,7 +226,7 @@ void reserve(void)
             cin >> answer;
             answer = toupper(answer);
 
-            if (answer == 'Y' || "YES")
+            if (answer == 'Y')
                 reserve();
             else
                 messagemenu();
@@ -301,10 +263,15 @@ void reserve(void)
     cin >> answer;
     answer = toupper(answer);
 
-    if (answer == 'Y' || "YES")
+    if (answer == 'Y')
+    {
         messagemenu();
+    }
     else
+    {
         reserve();
+    }
+
     return;
 }
 //2. Search
@@ -341,13 +308,14 @@ void search(void)
     { //printout table
         space();
         cinemascreen();
+        cout << "\n\n";
         tickets();
 
         cout << "\n"
              << space() << "This seat is reserved. Would you like to search for more (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
-        if (answer == 'Y' || "YES")
+        if (answer == 'Y')
         {
             search();
         }
@@ -357,13 +325,14 @@ void search(void)
         //printout table
         space();
         cinemascreen();
+        cout << "\n\n";
         tickets();
 
         cout << "\n\n";
         cout << space() << "This seat is available. Would you like to reserve a seat (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
-        if (answer == 'Y' || "YES")
+        if (answer == 'Y')
         {
             reserve();
         }
@@ -412,7 +381,7 @@ void erase(void)
         char answer;
         cin >> answer;
         answer = toupper(answer);
-        if (answer == 'Y' || "YES")
+        if (answer == 'Y')
         {
             messagemenu();
         }
@@ -427,7 +396,7 @@ void erase(void)
         cout << "No seats reserved. Would you like to reserve first? (Y/N)? : ";
         cin >> answer;
         answer = toupper(answer);
-        if (answer == 'Y' || "YES")
+        if (answer == 'Y')
         {
             reserve();
         }
@@ -465,7 +434,7 @@ void view(void)
          << space() << "Would you like to go back to the main menu (Y/N)? : ";
     cin >> answer;
     answer = toupper(answer);
-    if (answer == 'Y' || "YES")
+    if (answer == 'Y')
         messagemenu();
     else
         view();
@@ -493,41 +462,3 @@ main(void)
 
     return 0;
 }
-
-//things to do
-
-// CLEAN UP CODE YUNG LAST STEP
-// dapat yung spacing ng table hindi masira kapag nag input ng mahabang name
-// dapat yung search ay makapag recommend ng available seats *TAPOS NA*
-// kailangan based sa input sa kung gano karami yung magpapareserve para pwedeng individual or group *TAPOS NA*
-// dapat sa isang text file nalang my_receipt.txt tapos nag a-append kapag nag pa reserve by group.*TAPOS NA*
-// pag nag delete dapat ma delete rin yung txt file*TAPOS NA*
-// pagandahin pa yung table at yung code *TAPOS NA*
-// ayusin yung pag input ng user para hindi mukhang tae kapag mag ttype sila *TAPOS NA*
-// INDENTION PARA MALINIS space() *TAPOS NA*
-
-//TAPOS TAPOS NA?
-
-/* 1. Menu: */
-
-/* Search - seat if available to reserve,
-
-Reserve - input your name and the selected seat number, Reserve seat individual and by group (enter names based on the number of seats).
-
-Cancel/Delete Reservation Record – remove the name and the seat should be available again.
-
-View Record - names, seat number
-
-Exit.
-
-2. Input Data: Name and seat number *
-
-3. Calculated data change status if reserve or not *
-
-4. Calculated behavior is checking for continuous seats e.g. 2 seats, 3 seats, 4 seats, etc.
-
-5. Data for system should be saved on a flat file e.g. text file or txt files. *
-
-6. System can accept multiple reservation. *
-
-7. Design your own Menu.*/
