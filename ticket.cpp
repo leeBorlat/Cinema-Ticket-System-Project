@@ -19,7 +19,6 @@ void view(void);
 void quit(void);
 void tickets(void);
 void cinemascreen(void);
-int customerNames(void);
 
 void (*options[])(void) = {reserve, search, erase, view, quit};
 char space();
@@ -122,7 +121,7 @@ void tickets(void)
                 newMaxLength = (5 / 2) + 1;
                 for (int nameSpace = 0; nameSpace < newMaxLength; nameSpace++)
                 {
-                    cout << "*";
+                    cout << " ";
                 }
             }
             else if (ticketTable[x][y].length() != maxLength)
@@ -134,11 +133,11 @@ void tickets(void)
                         maxLength += 1;
                         continue;
                     }
-                    cout << ".";
+                    cout << " ";
                 }
             }
 
-            cout << "|";
+            cout << "      |      ";
         }
 
         cout << "\n";
