@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <cstring>
+#include <iomanip>
 using namespace std;
 
 //PANG INITIALIZE NG MGA FUNCTIONS
@@ -50,14 +51,15 @@ char space()
 void cinemascreen()
 {
     cout << "\n\n";
-    cout << space() << "                   ****************************************************" << endl;
-    cout << space() << "                   *                   Lee's Cinema                   *" << endl;
-    cout << space() << "                   ****************************************************" << endl;
+    cout << space() << "                      ****************************************************" << endl;
+    cout << space() << "                      *                   Lee's Cinema                   *" << endl;
+    cout << space() << "                      ****************************************************" << endl;
 }
 //program logo
 void page(void)
 {
     cinemascreen();
+    cout << "\n\n";
     cout << space() << "                   Type start: ";
     cin >> startButton;
     if (startButton != "start")
@@ -115,29 +117,35 @@ void tickets(void)
         space();
         for (int y = 0; y <= 5; y++)
         {
-            cout << " " << ticketTable[x][y];
-            if (ticketTable[x][y].length() == 5)
+            cout << "      " << ticketTable[x][y];
+            if (ticketTable[x][y].length() == 6)
             {
-                newMaxLength = (5 / 2) + 1;
-                for (int nameSpace = 0; nameSpace < newMaxLength; nameSpace++)
-                {
-                    cout << " ";
-                }
+                cout << setw(4) << "" << setw(4);
             }
-            else if (ticketTable[x][y].length() != maxLength)
+            else if (ticketTable[x][y].length() == 5)
             {
-                for (int nameSpaceTwo = 1; nameSpaceTwo < maxLength; nameSpaceTwo++)
-                {
-                    while (maxLength % 2 != 0)
-                    {
-                        maxLength += 1;
-                        continue;
-                    }
-                    cout << " ";
-                }
+                cout << setw(5);
             }
-
-            cout << "      |      ";
+            else if (ticketTable[x][y].length() == 4)
+            {
+                cout << setw(6);
+            }
+            else if (ticketTable[x][y].length() == 3)
+            {
+                cout << setw(7);
+            }
+            else if (ticketTable[x][y].length() == 2)
+            {
+                cout << setw(8);
+            }
+            else if (ticketTable[x][y].length() == 1)
+            {
+                cout << setw(9);
+            }
+            else
+            {
+            }
+            cout << "|";
         }
 
         cout << "\n";
@@ -147,8 +155,22 @@ void tickets(void)
 
 int customerNames()
 {
-    cout << space() << "\tCustomer Name: ";
+    char answer;
+    cout << space() << "\tCustomer Name (upto 6 letters): ";
     cin >> customerName;
+    if (customerName.length() > 6)
+    {
+        cout << "\n"
+             << space() << "Please enter only up to 6 letters. Reserve again? (Y/N) : ";
+        cin >> answer;
+        answer = toupper(answer);
+
+        if (answer == 'Y')
+            reserve();
+        else
+            messagemenu();
+    }
+
     lenOfName = customerName.length();
     if (maxLength < lenOfName)
     {
@@ -172,6 +194,7 @@ void reserve(void)
     //Prints out available seats available to reserve.
     cout << space() << "Here are the available seats you can reserve: \n";
     cinemascreen();
+    cout << "\n\n";
     tickets();
 
     cout << "\n\n"
@@ -236,6 +259,7 @@ void reserve(void)
     system("cls");
     space();
     cinemascreen();
+    cout << "\n\n";
     tickets();
 
     cout << "\n\n";
