@@ -98,7 +98,7 @@ void tickets(void)
         for (int y = 0; y <= 5; y++)
         {
             if (ticketTable[x][y].length() == 6)  cout << setw(11);
-            else if (ticketTable[x][y].length() == 5)  cout << setw(7);
+            else if (ticketTable[x][y].length() == 5)  cout << setw(10);
             else if (ticketTable[x][y].length() == 4)  cout << setw(10);
             else if (ticketTable[x][y].length() == 3)  cout << setw(9);
             else if (ticketTable[x][y].length() == 2)  cout << setw(8);
